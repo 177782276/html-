@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)file:///C:/Users/%E5%8D%8E%E7%92%A8/Documents/HBuilderProjects/123.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备报修系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #e0f2f1; /* 浅蓝色背景 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* 表头样式（纯色背景） */
+        #header {
+            width: 100%;
+            background-color: #2196F3; /* 蓝色表头 */
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+        }
+
+        /* HE图标蓝绿渐变 */
+        .he-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(to bottom, #4CAF50, #2196F3); /* 仅图标使用渐变 */
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 50%;
+            margin-right: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease; /* 点击动画 */
+        }
+
+        .he-icon:hover {
+            transform: scale(1.05); /* 鼠标悬停缩放效果 */
+        }
+
+        #repairForm {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* 表单元素样式（保持不变） */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        #repairForm input,
+        #repairForm textarea,
+        #repairForm button {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* 移动端适配（保持不变） */
+        @media (max-width: 768px) {
+            #header {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            .he-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <span class="he-icon">HE</span>
+        <h2>华璨电子有限公司</h2>
+        <p>设备报修系统</p>
+    </header>
+	<form id="repairForm">
+	        <input type="hidden" id="deviceId" name="deviceId" required="">
+	        <input type="hidden" id="model" name="model" required="">
+	        <input type="hidden" id="warrantyDate" name="warrantyDate" required="">
+	
+	        <div class="form-group">
+	            <textarea name="faultDesc" placeholder="请详细描述设备故障情况" required="" style="height: 150px; resize: vertical;"></textarea>
+	        </div>
+	
+	        <div class="form-group">
+	            <input type="text" name="classroomNo" placeholder="例如：教A-302" required="">
+	        </div>
+	
+	        <div class="form-group">
+	            <input type="file" class="file-input" name="images" accept="image/*" multiple="" id="images">
+	            <label for="images" class="file-label">上传故障图片</label>
+	        </div>
+	
+	        <button type="submit">提交报修</button>
+	    </form>
+	
+	    <script>
+	        // 表单提交逻辑保持不变
+	        document.getElementById('repairForm').addEventListener('submit', async (e) => {
+	            e.preventDefault();
+	            const formData = new FormData(e.target);
+	            formData.append('售后单号', `SH-${Date.now().toString().slice(-6)}-${Math.random().toString().slice(2, 6)}`);
+	            
+	            try {
+	                const response = await fetch('/api/repair/submit', { 
+	                    method: 'POST', 
+	                    body: formData 
+	                });
+	                
+	                if (response.ok) {
+	                    window.location.href = '/nextPage';
+	                } else {
+	                    alert('提交失败，请重试');
+	                }
+	            } catch (error) {
+	                console.error('Error:', error);
+	                alert('网络错误，请检查连接');
+	            }
+	        });
+	    </script>
+	
+	</body></html>
